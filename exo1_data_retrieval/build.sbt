@@ -13,3 +13,17 @@ libraryDependencies += "org.apache.spark" %% "spark-core" % "4.2.0"
 libraryDependencies += "org.apache.spark" %% "spark-sql" % "4.2.0"
 // Source: https://mvnrepository.com/artifact/org.apache.spark/spark-hadoop-cloud
 libraryDependencies += "org.apache.spark" %% "spark-hadoop-cloud" % "4.2.0"
+
+fork := true
+javaOptions ++= Seq(
+  "--add-opens=java.base/java.lang=ALL-UNNAMED",
+  "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
+  "--add-opens=java.base/java.io=ALL-UNNAMED",
+  "--add-opens=java.base/java.net=ALL-UNNAMED",
+  "--add-opens=java.base/java.nio=ALL-UNNAMED",
+  "--add-opens=java.base/java.util=ALL-UNNAMED",
+  "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
+  "--add-opens=java.base/sun.nio.cs=ALL-UNNAMED",
+  "--add-opens=java.base/sun.security.action=ALL-UNNAMED",
+  "--add-opens=java.base/sun.util.calendar=ALL-UNNAMED"
+)
