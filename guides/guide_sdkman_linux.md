@@ -15,7 +15,7 @@ sudo apt install -y curl zip unzip
    curl -s "https://sdkman.io" | bash
    ```
 
-2. **Initialiser SDKMAN!** : Rechargez la configuration de votre terminal actuel (ou fermez-le et réouvrez-le) :
+2. **Initialiser SDKMAN!** : Rechargez la configuration de votre terminal actuel (ou fermez-le et rouvrez-le) :
    ```bash
    source "$HOME/.sdkman/bin/sdkman-init.sh"
    ```

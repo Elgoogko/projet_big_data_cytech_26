@@ -26,7 +26,7 @@ Scoop est un manager de versions de logiciels en général, pas seulement Java e
 Référé vous au guide d'installation : [Guide Scoop](guide_scoop_windows_jdk.md)
 
 > [!WARNING]
-> SDKMAN! et scoop n'utilise pas les mêmes noms pour définirs les versions de Java ! 
+> SDKMAN! et scoop n'utilise pas les mêmes noms pour définir les versions de Java !
 > Ainsi, pour java 11 :
 > - Scoop : openjdk11
 > - SDKMAN! : java 11.0.32-amzn
@@ -86,7 +86,7 @@ Et copier dans la boite de texte :
   "--add-opens=java.base/sun.util.calendar=ALL-UNNAMED"
 ```
 
-### 3.2 🆚 VScode
+### 3.2 🆚 Vscode
 
 Ajouter l'extension "Metals" pour Scala et Spark. Le mieux reste quand mêmes les commandes sbt
 Commandes: 
@@ -127,7 +127,8 @@ D'abord installer Docker Desktop (L'application, pas le CLI, sinon vous aurez un
 > # Installer Ubuntu
 > wsl --install -d Ubuntu
 > ```
-> Les commandes bash seront alors disponible sur windows. Mais attention : ce n'est pas un autre système, c'est un adaptateur. Eviter donc les commandes du type "rm -r./" car elles s'attaqueront directement à Windows.
+> Les commandes bash seront alors disponible sur windows. Mais attention : ce n'est pas un autre système, c'est un
+adaptateur. Éviter donc les commandes du type "rm -r./" car elles s'attaqueront directement à Windows.
 
 ### 4.2 RustFS
 
@@ -139,7 +140,7 @@ docker run -d --name rustfs -p 9000:9000 -p 9001:9001 -v rustfs-data:/data rustf
 docker logs -f rustfs
 ```
 
-Une fois que c'est fait, aller dans Docker Desktop dans "Containers" → "Actions" -> "Start".
+Une fois que c'est fait, aller dans Docker Desktop dans "Containers" → "Actions" → "Start".
 RustFS va demander un nom d'utilisateur et un mot de passe. Mettez ceux de base : 
 - nom : rustfsadmin
 - mdp : rustfsadmin

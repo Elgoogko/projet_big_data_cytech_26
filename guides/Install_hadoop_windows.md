@@ -1,7 +1,7 @@
 # How to install Hadoop on Windows 11
 
 Stolen from : https://github.com/ruslanmv/How-to-install-Hadoop-on-Windows
-Hello everyone, today we are going to to install Hadoop 3.3.0 on Windows 11.
+Hello everyone, today we are going to install Hadoop 3.3.0 on Windows 11.
 
 ## Prerequisites
 
@@ -26,9 +26,9 @@ After finishing the file download, we should unpack the package using 7zip or co
 cd Downloads 
 ```
 
-Because I am installing Hadoop in folder Haddop  of my C drive (C:\Hadoop) 
+Because I am installing Hadoop in folder Hadoop of my C drive (C:\Hadoop)
 
-we create the the directory
+we create the directory
 
 ```
 mkdir C:\Hadoop
@@ -59,7 +59,7 @@ cd Downloads
 
 Because I am installing Java in folder Java of my C drive (C:\Java) 
 
-we create the the directory
+we create the directory
 
 ```
 mkdir C:\Java
@@ -75,7 +75,10 @@ tar -xvzf  jre-8u361-windows-x64.tar.gz -C C:\Java\
 
 
 ## Step 3 - Install Hadoop native IO binary
-Hadoop on Linux includes optional Native IO support. However Native IO is mandatory on Windows and without it you will not be able to get your installation working. The Windows native IO libraries are not included as part of Apache Hadoop release. Thus we need to build and install it.
+
+Hadoop on Linux includes optional Native IO support. However, Native IO is mandatory on Windows and without it you will
+not be able to get your installation working. The Windows native IO libraries are not included as part of Apache Hadoop
+release. Thus we need to build and install it.
 
 infoThe following repository already pre-built Hadoop Windows native libraries:
 
@@ -104,7 +107,7 @@ copy *.*  C:\Hadoop\hadoop-3.3.0\bin
 
 ## Step 5 - Configure environment variables
 
-Now we've downloaded and unpacked all the artefacts we need to configure two important environment variables.
+Now we've downloaded and unpacked all the artifacts we need to configure two important environment variables.
 
 First you click the windows button and type environment
 
@@ -269,8 +272,7 @@ Edit file **yarn-site.xml** in %HADOOP_HOME%\etc\hadoop folder.
 </configuration>
 ```
 
-
-### Step 7 - Initialise HDFS 
+### Step 7 - Initialize HDFS
 
 Run the following command in Command Prompt 
 

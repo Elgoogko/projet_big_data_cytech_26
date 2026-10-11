@@ -5,9 +5,9 @@
 ### Modalités de rendu
 
 1. Pull Request vers la branch `main`
-2. Dépot du rapport et du code source zippé dans Teams (ouverture prochaine des accès)
+2. Dépot du rapport et du code source zippés dans Teams (ouverture prochaine des accès)
 
-Date limite de rendu : Lundi 21 Décembre 2026 à 6h00m00s
+Date limite de rendu : Lundi 21 décembre 2026 à 6h00m00s
 
 ## Environment
 
@@ -39,6 +39,7 @@ object SparkApp extends App {
 }
 ```
 
-En cas de développement de composants en langage Python pour l'exercice 4 et ex exercice 5, l'utilisation de UV est obligatoire.
+En cas de développement de composants en langage Python pour l'exercice 4 et exercice 5, l'utilisation d'UV est
+obligatoire.
 
 Si vous faites un notebook exploratoire de données, je vous demande de le faire via Marimo et non via Jupyter.

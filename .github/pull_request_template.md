@@ -4,13 +4,13 @@
 ## Group Members
 List every member who contributed to this submission (full name + student ID, if used).
 
-| # | Full name | Class      |
-|---|-----------|------------|
-| 1 |           |            |
-| 2 |           |            |
-| 3 |           |            |
-| 4 |           |            |
-| 5 |           |            |
+| # | Full name          | Class            |
+|---|--------------------|------------------|
+| 1 | BOICOS Bari-joris  | ING3 AI Groupe A |
+| 2 | LAMBERT Baptiste   | ING3 AI Groupe A |
+| 3 | NGO Jonathan       | ING3 AI Groupe A |
+| 4 | SHAO Junjie (éric) | ING3 AI Groupe B |
+| 5 | PANFlorianne       | ING3 AI Groupe B |
 
 ## Description
 Briefly describe what this PR implements or fixes.
@@ -24,7 +24,7 @@ Briefly describe what this PR implements or fixes.
 - [ ] All tests pass locally
 - [ ] Documentation / comments updated where needed
 - [ ] No unused files, debug prints, or commented-out code left in
-- [ ] Report is available at class Microsoft Teams assignement tab
+- [ ] Report is available at class Microsoft Teams assignment tab
 
 ## How to Test
 Steps the grader should follow to run/verify this submission for each exercice.
