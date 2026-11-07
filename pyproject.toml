@@ -1,0 +1,12 @@
+[project]
+name = "projet-big-data-cytech-26"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "boto3>=1.43.126",
+    "python-dateutil>=2.9.0.post0",
+    "requests>=2.34.2",
+]
+
+[tool.uv]
+package = false
