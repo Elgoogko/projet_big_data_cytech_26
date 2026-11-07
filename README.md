@@ -1,45 +1,42 @@
-# 💻 Projet Big Data
+# Projet Big Data
 
-## Descriptif
+# Sommaire
+<img src="https://upload.wikimedia.org/wikipedia/commons/f/f8/CY_Tech.svg" align="right"
+     alt="Logo CY Tech" width="170">
 
-### Modalités de rendu
+* [Présentation](#présentation) : Présentation du projet et de ses membres
+* [Environnement](#environnement) : Installation des dépendances
+* [Lancer le projet](#lancer-le-projet) : Instructions pour lancer le projet
 
-1. Pull Request vers la branch `main`
-2. Dépot du rapport et du code source zippés dans Teams (ouverture prochaine des accès)
+## Présentation
+Projet Big Data de l'année 2024-2025 de CY Tech réalisé par : 
+- Bari-Joris BOICOS
+- Baptiste LAMBERT
+- Florianne PAN
+- Jonathan NGO
+- Junjie (Eric) SHAO
 
-Date limite de rendu : Lundi 21 décembre 2026 à 6h00m00s
-
-## Environment
+## Environnement
 
 - Java 11
 - Python 3.10
 - Scala 2.13.17
 - RustFS
 
-
-Le code minimal pour faire fonctionner un code avec RustFS :
-```scala
-import org.apache.spark.sql.{SparkSession, DataFrame}
-
-object SparkApp extends App {
-  val spark = SparkSession.builder()
-    .appName("SparkApp")
-    .master("local")
-    .config("fs.s3a.access.key", "rustfsadmin")
-    .config("fs.s3a.secret.key", "rustfsadmin")
-    .config("fs.s3a.endpoint", "http://localhost:9000/") // A changer lors du déploiement
-    .config("fs.s3a.path.style.access", "true")
-    .config("fs.s3a.connection.ssl.enable", "false")
-    .config("fs.s3a.attempts.maximum", "1")
-    .config("fs.s3a.connection.establish.timeout", "6000")
-    .config("fs.s3a.connection.timeout", "5000")
-    .getOrCreate()
-  spark.sparkContext.setLogLevel("WARN")
-
-}
+## Lancer le projet
+Avant tout, veillez d'abord lancer les conteneurs docker:
+```
+docker compose up
 ```
 
-En cas de développement de composants en langage Python pour l'exercice 4 et exercice 5, l'utilisation d'UV est
-obligatoire.
+### Ouvrir RustFS
+RustFS peut être accédé sur `http://localhost:9001` en s'authentifiant avec:  
+**Account** : `rustfsadmin`  
+**Key** : `rustfsadmin`
 
-Si vous faites un notebook exploratoire de données, je vous demande de le faire via Marimo et non via Jupyter.
+
+### Téléchargement des données
+Pour télécharger les fichiers parquet des 3 derniers mois disponibles dans RustFS :
+```py
+uv run download_parquet.py
+```
