@@ -1,0 +1,7 @@
+rustfs:
+  endpoint: "http://localhost:9000"
+  bucket_name: "nyc-bucket"
+  target_dir: "nyc_raw"
+
+nyc_tlc:
+  base_url: "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_{}.parquet"
