@@ -29,6 +29,11 @@ Avant tout, veillez d'abord lancer les conteneurs docker:
 docker compose up
 ```
 
+Et ajouter le .env : 
+```
+cp .env.example .env
+```
+
 ### Ouvrir RustFS
 RustFS peut être accédé sur `http://localhost:9001` en s'authentifiant avec:  
 **Account** : `rustfsadmin`  
@@ -36,7 +41,7 @@ RustFS peut être accédé sur `http://localhost:9001` en s'authentifiant avec:
 
 
 ### Téléchargement des données
-Pour télécharger les fichiers parquet des 3 derniers mois disponibles dans RustFS :
-```py
-uv run download_parquet.py
+Pour télécharger les fichiers parquet des N derniers mois disponibles (par défaut à 3) dans RustFS :
+```
+uv run download_parquet.py --nb-months N
 ```
