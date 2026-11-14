@@ -43,5 +43,6 @@ RustFS peut être accédé sur `http://localhost:9001` en s'authentifiant avec:
 ### Téléchargement des données
 Pour télécharger les fichiers parquet des N derniers mois disponibles (par défaut à 3) dans RustFS :
 ```
-uv run download_parquet.py --nb-months N
+cd spark_data_integration
+sbt "run --nb-months 6"
 ```
