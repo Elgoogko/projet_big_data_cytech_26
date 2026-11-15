@@ -85,7 +85,7 @@ object Main {
 
         if (accessKey.isEmpty || secretKey.isEmpty) {
             logger.error("Les variables AWS_ACCESS_KEY ou AWS_SECRET_KEY sont introuvables.")
-            System.exit(1)
+            sys.exit(1)
         }
         (accessKey, secretKey)
     }
@@ -103,7 +103,7 @@ object Main {
         val configFile = parentDirectoryFile(configFileName)
         if (!configFile.exists()) {
             logger.error(s"Le fichier de configuration '${configFile.getPath}' n'existe pas.")
-            System.exit(1)
+            sys.exit(1)
         } 
         import scala.jdk.CollectionConverters._
         Using.resource(Source.fromFile(configFile, "UTF-8")) { source =>
@@ -333,28 +333,43 @@ object Main {
         }
     }
 
-    /** Analyse et extrait le paramètre CLI fixant le nombre de mois à traiter.
-    *
-    * Inspecte les arguments du tableau à la recherche de `--nb_months`, `--nb-months` ou `-n`.
-    *
-    * @param args Tableau des arguments transmis à l'application.
-    * @return Le nombre de mois à traiter sous forme d'entier (3 par défaut si non spécifié ou -1 si invalide).
-    */
-    def parseArgs(args: Array[String]): Int = {
-        args.sliding(2, 1).collect {
-            case Array("--nb_months", value) => Try(value.toInt).getOrElse(-1)
-            case Array("--nb-months", value) => Try(value.toInt).getOrElse(-1)
-            case Array("-n", value)          => Try(value.toInt).getOrElse(-1)
-        }.toList.headOption.getOrElse(3)
+
+    /** Analyse et valide le paramètre CLI fixant le nombre de mois à traiter.
+      *
+      * Accepte l'absence d'arguments (valeur par défaut : 3) ou une paire
+      * `<drapeau> <entier>` parmi `--nb_months`, `--nb-months` et `-n`.
+      * Vérifie que la valeur fournie est un entier strictement positif (>= 1).
+      *
+      * @param args Tableau des arguments transmis à l'application.
+      * @return `Right(nbMonths)` si les arguments sont valides, ou `Left(messageErreur)`
+      *         en cas d'option inconnue, de format non numérique ou de valeur < 1.
+      */
+
+    def parseArgs(args: Array[String]): Either[String, Int] = {
+        val parsed = args.toList match {
+            case Nil => Right(3)
+            case ("--nb_months" | "--nb-months" | "-n") :: value :: Nil =>
+                value.toIntOption.toRight(
+                    s"Valeur invalide pour le nombre de mois : '$value' (entier attendu)."
+                )
+            case _ =>
+                Left(s"Arguments invalides : '${args.mkString(" ")}'. Usage : --nb-months <entier>")
+        }
+
+        parsed.filterOrElse(
+            _ >= 1,
+            s"Le nombre de mois doit être supérieur ou égal à 1."
+        )
     }
 
     def main(args: Array[String]): Unit = {
-        val nbMonths = parseArgs(args)
 
-        if (nbMonths < 1) {
-            logger.error("Le nombre de mois doit être un entier supérieur ou égal à 1.")
-            System.exit(1)
-        }
+        val nbMonths = parseArgs(args) match {
+            case Right(n) => n
+            case Left(errorMsg) =>
+                logger.error(errorMsg)
+                sys.exit(1)
+        }   
 
         val (accessKey, secretKey) = loadEnvironment()
         val config = loadConfig()
@@ -362,7 +377,7 @@ object Main {
 
         if (!checkRustfsConnection(endpoint)) {
             logger.error("Traitement interrompu : RustFS est inaccessible (docker compose up ?).")
-            System.exit(1)
+            sys.exit(1)
         }
 
         val spark = createSparkSession(endpoint, accessKey, secretKey)
