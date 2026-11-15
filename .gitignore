@@ -3,3 +3,9 @@
 .idea
 .env
 __pycache__/
+data/raw/*.parquet
+
+.bsp/
+.metals/
+project/
+target/
