@@ -66,6 +66,22 @@ services:
     command: ["org.apache.spark.deploy.worker.Worker", "spark://spark-master:7077"]
     networks:
       - spark-net
+      
+   postgres:
+    image: postgres:16
+    container_name: postgres
+    hostname: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=nyc_taxi
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - spark-net
+
 
 networks:
   spark-net:
@@ -73,3 +89,4 @@ networks:
 
 volumes:
   rustfs-data:
+  postgres-data:
