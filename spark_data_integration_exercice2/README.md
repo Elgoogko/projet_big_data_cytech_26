@@ -3,6 +3,14 @@
 L'objectif de cet exercice est de valider les données extraites du parquet du DataLake.
 C'est un premier nettoyage des données.
 
+# Pipeline de traitement
+
+|                      | Données brutes                                             | Normalisation                                                     | Validation                                                                                                                                             | Sauvegarde                                              |
+|----------------------|------------------------------------------------------------|-------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| Type de données      | Parquet                                                    | DataFrame                                                         | DataFrame                                                                                                                                              | Parquet                                                 |
+| Action               | Chargement des données depuis le bucket RustFS             | Transformation des données (Null en codes). Altération du dataset | Validation des données selon le contrat donnés. En deux étapes: 1) Filtre par rapport au contrat. 2) Filtre de cohérence (valeurs abbérantes, dates..) | sauvegarde des données prêtes à l'emploi dans le bucket |
+| Chemin de sauvegarde | "s3a://nyc-bucket/nyc_raw/yellow_tripdata_2026-07.parquet" | data/interim/quarantine                                           | data/interim/quarantine                                                                                                                                | data/processed                                          |
+
 # Lecture des données
 
 root

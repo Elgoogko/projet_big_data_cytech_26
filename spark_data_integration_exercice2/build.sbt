@@ -15,6 +15,11 @@ libraryDependencies += "org.apache.spark" %% "spark-sql" % "4.2.0"
 libraryDependencies += "org.apache.spark" %% "spark-hadoop-cloud" % "4.2.0"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % Test
 
+// Lecture d'un fichier YAML de configuration
+libraryDependencies += "org.yaml" % "snakeyaml" % "2.3"
+
+libraryDependencies += "io.github.cdimascio" % "dotenv-java" % "3.0.0"
+
 Test / fork := true
 Test / javaOptions += "--add-exports=java.base/sun.nio.ch=ALL-UNNAMED"
 
