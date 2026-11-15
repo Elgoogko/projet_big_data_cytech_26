@@ -104,7 +104,7 @@ CREATE TABLE fact_trip (
     total_amount          NUMERIC(10,2),
     
     -- attribut sans table dédiée
-    store_and_fwd_flag    CHAR(1)       CHECK (store_and_fwd_flag IN ('Y', 'N')),
+    store_and_fwd_flag    CHAR(1)       CHECK (store_and_fwd_flag IN ('Y', 'N'))
 );
 
 
