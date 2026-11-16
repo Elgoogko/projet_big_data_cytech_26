@@ -15,9 +15,15 @@ object ComplexFilters {
    * Helper pour avoir les bornes pour la fonction "validDateForTrip"
    *
    * @param fileName Nom du parquet à validé, le mois se trouve dans le nom
+   * @throws IllegalArgumentException Si le nom du fichier ne respecte pas le format attendu ou si il est vide
    * @return La borne "EndDate" du parquet
    */
   def monthBounds(fileName: String): (LocalDateTime, LocalDateTime) = {
+
+    if (!fileName.matches(".*_(\\d{4}-\\d{2})\\.parquet") || fileName.isEmpty) {
+      throw new IllegalArgumentException("Nom du fichier invalide, format attendu : 'yellow_tripdata_YYYY-MM.parquet'. Valeur reçue : " + fileName)
+    }
+
     val ym = YearMonth.parse(fileName.replaceAll(".*_(\\d{4}-\\d{2})\\.parquet", "$1"))
     (ym.atDay(1).atStartOfDay(), ym.plusMonths(1).atDay(1).atStartOfDay())
   }
@@ -41,7 +47,7 @@ object ComplexFilters {
    *
    * @return Les colonnes qui respectent ce filtrage
    */
-  def validTemporalCoherence(): Column = {
+  def validTemporalCoherence: Column = {
     col("tpep_dropoff_datetime") > col("tpep_pickup_datetime")
   }
 
