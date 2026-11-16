@@ -46,3 +46,30 @@ Pour télécharger les fichiers parquet des N derniers mois disponibles (par dé
 cd spark_data_integration
 sbt "run --nb-months N"
 ```
+
+### Data Warehouse PostgreSQL (Modèle en flocon)
+#### 1. Démarrer PostgreSQL
+Pour démarrer uniquement la base de données :
+```
+docker compose up -d postgres
+```
+
+Attendre que la base soit prête avant de lancer les scripts :
+```
+until docker compose exec postgres pg_isready -U postgres -d nyc_taxi; do sleep 2; done
+```
+#### 2. Créer les tables du modèle en flocon et leurs contraintes
+```
+docker compose exec -T postgres psql -U postgres -d nyc_taxi -v ON_ERROR_STOP=1 < spark_data_integration_exercice3/creation.sql
+```
+#### 3. Insérer les données de référence (vendeurs, zones, dates, heures).
+```
+docker compose exec -T postgres psql -U postgres -d nyc_taxi -v ON_ERROR_STOP=1 < spark_data_integration_exercice3/insertion.sql
+```
+#### Informations de connexion 
+- **Base** : `nyc_taxi`
+- **Utilisateur** : `postgres`
+- **Mot de passe** : `postgres`
+- **URL JDBC** : `jdbc:postgresql://postgres:5432/nyc_taxi`
+
+
