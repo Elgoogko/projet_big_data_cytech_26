@@ -1,15 +1,15 @@
 # Seuil maximum auxquels les données seront filtrées, permet de filtrer les données aberrantes
-filters_threshold:
-  fare_amount: 0.0
-  extra: 0.0
-  mta_tax: 0.0
-  tip_amount: 0.0
-  tolls_amount: 0.0
-  improvement_surcharge: 0.0
-  total_amount: 0.0
-  congestion_surcharge: 0.0
-  Airport_fee: 0.0
-  cbd_congestion_fee: 0.0
+filters_thresholds:
+  fare_amount: null
+  extra: null
+  mta_tax: null
+  tip_amount: null
+  tolls_amount: null
+  improvement_surcharge: null
+  total_amount: null
+  congestion_surcharge: null
+  Airport_fee: null
+  cbd_congestion_fee: null
 
 app:
   spark:

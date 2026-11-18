@@ -15,6 +15,7 @@ C'est un premier nettoyage des données.
 
 - [x] Créer la couche de filtrage de normalisation des données et ses tests associés
 - [x] Créer la couche de filtrage de validation des données #1, filtrage par rapport au contrat et ses tests associés
+- [ ] Créer le script de validation du fichier de configuration et des valeurs de fallbacks
 - [ ] Créer la couche de filtrage de validation des données #2, filtrage de cohérence (valeurs abbérantes, dates..) et
   ses tests associés
 - [ ] Ajout d'un "verbose_mode" pour afficher les données altérées et retirées
