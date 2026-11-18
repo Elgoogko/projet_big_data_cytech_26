@@ -11,16 +11,21 @@ import org.apache.spark.sql.{Column, DataFrame}
 import org.apache.spark.sql.functions._ // col, lit, when, year, month, abs...
 
 // Données de tests
-import fr.cytech.dummyDatas._
+import fr.cytech.fixtures._
+import fr.cytech.testUtils.TaxiTrip
+import fr.cytech.integration.MainSpec
 
 /**
  * Cette class teste les premiers filtres de validation des données un par un se trouvant dans "Filters".
  * Chaque filtre est testé avec N posssibilités définis dans les données de tests.
  *
- * @see test.scala.fr.cytech.dummyDatas.SingleDatas
+ * @see test.scala.fr.cytech.fixtures.SingleDatas
  * @see main.scala.fr.cytech.integration.Filters
  */
-class ComplexFiltersSpec extends AnyFunSuite with Matchers {
+class ComplexFiltersSpec extends MainSpec {
+
+  import spark.implicits._
+
   for ((value, expected_start, expected_end) <- ComplexDatas.monthBoundsCases) {
     test(s"MonthBounds Test : $value -> $expected_start, $expected_end") {
       val (start, end) = ComplexFilters.monthBounds(value)
@@ -45,7 +50,7 @@ class ComplexFiltersSpec extends AnyFunSuite with Matchers {
     exception.getMessage() shouldBe "Nom du fichier invalide, format attendu : 'yellow_tripdata_YYYY-MM.parquet'. Valeur reçue : "
   }
 
-
+  // test sur différentes dates (est ce que le voyage appartient bien au mois)
   for ((value, expected) <- ComplexDatas.pickupCases) {
     test(s"test pickupcases : $value -> $expected") {
 

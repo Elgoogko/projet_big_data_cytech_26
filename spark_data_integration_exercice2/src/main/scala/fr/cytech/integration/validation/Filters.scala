@@ -33,7 +33,7 @@ object Filters {
 
   def validFareAmount: Column = col("fare_amount") >= 0
 
-  def validExtra: Column col ("extra") >= 0
+  def validExtra: Column = col("extra") >= 0
 
   def validMtaTax: Column = col("mta_tax") >= 0
 

@@ -11,6 +11,17 @@ C'est un premier nettoyage des données.
 | Action               | Chargement des données depuis le bucket RustFS             | Transformation des données (Null en codes). Altération du dataset | Validation des données selon le contrat donnés. En deux étapes: 1) Filtre par rapport au contrat. 2) Filtre de cohérence (valeurs abbérantes, dates..) | sauvegarde des données prêtes à l'emploi dans le bucket |
 | Chemin de sauvegarde | "s3a://nyc-bucket/nyc_raw/yellow_tripdata_2026-07.parquet" | data/interim/quarantine                                           | data/interim/quarantine                                                                                                                                | data/processed                                          |
 
+# TODO Liste
+
+- [x] Créer la couche de filtrage de normalisation des données et ses tests associés
+- [x] Créer la couche de filtrage de validation des données #1, filtrage par rapport au contrat et ses tests associés
+- [ ] Créer la couche de filtrage de validation des données #2, filtrage de cohérence (valeurs abbérantes, dates..) et
+  ses tests associés
+- [ ] Ajout d'un "verbose_mode" pour afficher les données altérées et retirées
+- [ ] Ajout de la "quarantine" pour sauvegarder les données altérées et retirées
+- [ ] Script de création d'un bucket RustFS "nyc_processed"
+- [ ] Data exploration pour déterminer le seuil d'acceptabilité des données
+
 # Lecture des données
 
 root

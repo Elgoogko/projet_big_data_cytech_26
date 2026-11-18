@@ -1,11 +1,8 @@
 package fr.cytech.integration.normalization
 
-import org.apache.spark.sql.SparkSession
-
 // Bibliothèques de sclatest
 import org.scalatest.funsuite.AnyFunSuite // Importe "test"
 import org.scalatest.matchers.should.Matchers // importe les mots clés "shouldBe", "in"....
-import org.scalatest.BeforeAndAfterAll // Importe les fonctions "beforeAll", "afterAll" : permet de définir des actions à effectuer avant et après les tests
 
 // Bibliothèques de spark SQL : permet de manipulé des objets scala comme des tableau SQL
 import org.apache.spark.sql.{Column, DataFrame}
@@ -13,31 +10,18 @@ import org.apache.spark.sql.functions._ // col, lit, when, year, month, abs...
 import java.time.LocalDateTime
 
 // Données de tests
-import fr.cytech.dummyDatas._
+import fr.cytech.fixtures._
+import fr.cytech.testUtils.TaxiTrip
 
+import fr.cytech.integration.MainSpec
 /**
  *
- * @see test.scala.fr.cytech.dummyDatas.SingleDatas
+ * @see test.scala.fr.cytech.fixtures.SingleDatas
  * @see main.scala.fr.cytech.integration.Filters
  */
-class NormalizeSpec extends AnyFunSuite with Matchers with BeforeAndAfterAll {
-
-  // Création de la session spark
-  implicit val spark: SparkSession = SparkSession.builder()
-    .appName("FilterTest")
-    .master("local[*]")
-    .getOrCreate()
+class NormalizeSpec extends MainSpec {
 
   import spark.implicits._
-
-  spark.sparkContext.setLogLevel("ERROR") // Réduit les logs inutiles
-
-  // Fermeture de la session spark après les tests
-  override def afterAll(): Unit = {
-    spark.stop()
-    super.afterAll()
-  }
-
 
   // test paramétré de la fonction de normalisation des différents coûts.
   test("test fonction normalizeFees avec toutes les valeurs nulls") {

@@ -1,7 +1,7 @@
-package fr.cytech.dummyDatas
+package fr.cytech.fixtures
 
 import java.time.LocalDateTime
-
+import fr.cytech.testUtils.TaxiTrip
 /**
  * Objet regroupant les différentes valeurs de tests.
  */
@@ -30,10 +30,6 @@ object SingleDatas {
 
   val pickupDropoffCases: Seq[(Option[LocalDateTime], Boolean)] = Seq(
     (Some(LocalDateTime.of(2026, 7, 15, 10, 30, 0)), true), // cas normal
-    //    (Some(LocalDateTime.of(2026, 7, 1, 0, 0, 0)),    true),  // minuit pile, début de mois
-    //    (Some(LocalDateTime.of(2026, 7, 31, 23, 59, 59)), true), // dernière seconde du mois
-    //    (Some(LocalDateTime.of(2024, 2, 29, 12, 0, 0)),  true),  // année bissextile
-    //    (Some(LocalDateTime.of(2026, 12, 31, 23, 59, 59)), true),// changement d'année
     (None, false) // null : doit être rejeté
   )
 

@@ -55,7 +55,7 @@ object ComplexFilters {
    * Vérifie la cohérence des taxes : le airportFee ne peux pas être appliqué si la départ n'est pas un aéroport.
    * Seulement pour les PULocationCode = 138; 132
    *
-   * @return
+   * @return les colonnes qui respecetent ce filtrage
    */
   def validAirportFees: Column = !(col("airport_fee") > 0) || col("PULocationID").isin(132, 138)
 }

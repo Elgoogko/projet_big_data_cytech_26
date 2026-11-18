@@ -10,7 +10,7 @@ import scala.jdk.CollectionConverters._ // ._ en Scala 2.13
 import io.github.cdimascio.dotenv.Dotenv
 
 /**
- * La quarantaine est un ensemble de sous dataframe du dataframe initial.
+ * La quarantaine est un sous ensemble du dataframe initial.
  * Ces dataframe regroupe toutes les valeurs qui on été altéré (normalize) ou retiré (validiation).
  * L'objectif est de garder une trace de ces données si des informations supplémentaires les rendent exploitables / à des fins de débug.
  *

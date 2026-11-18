@@ -1,6 +1,7 @@
-package fr.cytech.dummyDatas
+package fr.cytech.fixtures
 
 import java.time.LocalDateTime
+import fr.cytech.testUtils.TaxiTrip
 
 object Trips {
 
