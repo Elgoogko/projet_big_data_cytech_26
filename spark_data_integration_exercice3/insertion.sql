@@ -2,13 +2,13 @@
 
 BEGIN; 
 
-INSERT INTO dim_vendor (vendor_id, vendor_name) VALUES
+INSERT INTO dim_vendor (vendorid, vendorname) VALUES
     (1, 'Creative Mobile Technologies, LLC'),
     (2, 'Curb Mobility, LLC'),
     (6, 'Myle Technologies Inc'),
     (7, 'Helix');
 
-INSERT INTO dim_ratecode (ratecode_id, description) VALUES
+INSERT INTO dim_ratecode (ratecodeid, description) VALUES
     (1,  'Standard rate'),
     (2,  'JFK'),
     (3,  'Newark'),
@@ -43,7 +43,7 @@ INSERT INTO dim_service_zone (service_zone_id, service_zone_name) VALUES
     (4, 'N/A'),
     (5, 'Yellow Zone');
 
-INSERT INTO dim_location (location_id, zone_name, borough_id, service_zone_id) VALUES
+INSERT INTO dim_location (locationid, zone_name, borough_id, service_zone_id) VALUES
     (1, 'Newark Airport', 3, 3),
     (2, 'Jamaica Bay', 6, 2),
     (3, 'Allerton/Pelham Gardens', 1, 2),
@@ -310,33 +310,23 @@ INSERT INTO dim_location (location_id, zone_name, borough_id, service_zone_id) V
     (264, 'N/A', 8, 4),
     (265, 'Outside of NYC', 5, 4);
 
-
--- dim_month : 2009 à 2030 
-
-INSERT INTO dim_month (month_id, year, month)
-SELECT EXTRACT(YEAR FROM d)::INT * 100 + EXTRACT(MONTH FROM d)::INT,
-       EXTRACT(YEAR FROM d)::SMALLINT,
-       EXTRACT(MONTH FROM d)::SMALLINT
-FROM generate_series('2009-01-01'::date, '2030-12-01'::date, interval '1 month') AS d;
-
-
--- dim_date : chaque jour de 2009 à 2030
-
-INSERT INTO dim_date (date_id, full_date, day, day_of_week, is_weekend, month_id)
-SELECT TO_CHAR(d, 'YYYYMMDD')::INT,
-       d::date,
-       EXTRACT(DAY FROM d)::SMALLINT,
-       EXTRACT(ISODOW FROM d)::SMALLINT,
-       EXTRACT(ISODOW FROM d) IN (6, 7),
-       EXTRACT(YEAR FROM d)::INT * 100 + EXTRACT(MONTH FROM d)::INT
-FROM generate_series('2009-01-01'::date, '2030-12-31'::date, interval '1 day') AS d;
-
-
--- dim_time : chaque minute de la journée (1440 lignes)
-
-INSERT INTO dim_time (time_id, hour, minute)
-SELECT h * 100 + m, h, m
+-- ---------------------------------------------------------------------
+-- dim_hm : chaque minute de la journée (1 440 lignes - greedy)
+-- ---------------------------------------------------------------------
+INSERT INTO dim_hm (hm_id, hour, minute)
+SELECT (h * 100 + m)::SMALLINT, h::SMALLINT, m::SMALLINT
 FROM generate_series(0, 23) AS h, generate_series(0, 59) AS m;
 
-COMMIT;
+-- ---------------------------------------------------------------------
+-- dim_md : chaque jour de l'année sans l'année (366 lignes - greedy)
+-- On utilise 2024 (année bissextile) pour inclure le 29 février
+-- ---------------------------------------------------------------------
+INSERT INTO dim_md (md_id, month, day)
+SELECT (EXTRACT(MONTH FROM d)::INT * 100 + EXTRACT(DAY FROM d)::INT)::SMALLINT,
+       EXTRACT(MONTH FROM d)::SMALLINT,
+       EXTRACT(DAY FROM d)::SMALLINT
+FROM generate_series('2024-01-01'::date, '2024-12-31'::date, interval '1 day') AS d;
 
+-- Note : dim_time reste vide à l'initialisation (remplissage lazy lors de l'ingestion)
+
+COMMIT;
