@@ -1,4 +1,4 @@
-package fr.cytech.integration.normalization
+package fr.cytech.integration.data_processing.normalization
 
 // Bibliothèques de sclatest
 import org.scalatest.funsuite.AnyFunSuite // Importe "test"

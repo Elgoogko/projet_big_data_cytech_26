@@ -1,4 +1,4 @@
-package fr.cytech.integration.validation
+package fr.cytech.integration.data_processing.validation
 
 import org.apache.spark.sql.SparkSession
 

@@ -18,7 +18,11 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % Test
 // Lecture d'un fichier YAML de configuration
 libraryDependencies += "org.yaml" % "snakeyaml" % "2.3"
 
+// lecture simplifié des .env (pour java mais fonctionne aussi avec scala)
 libraryDependencies += "io.github.cdimascio" % "dotenv-java" % "3.0.0"
+
+// bibliothèque d'argparser pour sbt
+libraryDependencies += "com.github.scopt" %% "scopt" % "4.1.0"
 
 Test / fork := true
 Test / javaOptions += "--add-exports=java.base/sun.nio.ch=ALL-UNNAMED"

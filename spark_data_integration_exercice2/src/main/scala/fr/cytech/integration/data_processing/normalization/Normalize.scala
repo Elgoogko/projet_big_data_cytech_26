@@ -1,4 +1,4 @@
-package fr.cytech.integration.normalization
+package fr.cytech.integration.data_processing.normalization
 
 import org.apache.spark.sql.{Column, DataFrame}
 import org.apache.spark.sql.functions._ // col, lit, when, year, month, abs...
