@@ -1,0 +1,25 @@
+# Seuil maximum auxquels les données seront filtrées, permet de filtrer les données aberrantes
+filters_thresholds:
+  fare_amount: 0.0
+  extra: 0.0
+  mta_tax: 0.0
+  tip_amount: 0.0
+  tolls_amount: 0.0
+  improvement_surcharge: 0.0
+  total_amount: 0.0
+  congestion_surcharge: 0.0
+  Airport_fee: 0.0
+  cbd_congestion_fee: 0.0
+
+app:
+  spark:
+    app_name: "spark_data_integration_exercice2"
+    master: "local[*]"  # Utilise tous les coeurs de la machine
+  s3:
+    endpoint: "http://localhost:9001" # Pointe vers le bucket RustFS (serveur S3)
+    raw_path: "s3a://nyc-bucket/nyc_raw"
+    parquets: [ "yellow_tripdata_2026-06.parquet", "yellow_tripdata_2026-07.parquet" ]
+
+  data_processing:
+    quarantine: true # la quarantaine permet de garder en mémoire les données filtrées, s'il y a une erreur dans le traitement des données
+    quarantine_path: "data/quarantine" # chemin où seront stockées les données filtrées
