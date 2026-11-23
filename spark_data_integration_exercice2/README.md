@@ -17,14 +17,13 @@ C'est un premier nettoyage des données.
 
 - [x] Créer la couche de filtrage de normalisation des données et ses tests associés
 - [x] Créer la couche de filtrage de validation des données #1, filtrage par rapport au contrat et ses tests associés
-- [ ] Créer le script de validation du fichier de configuration et des valeurs de fallbacks
-- [ ] Créer la couche de filtrage de validation des données #2, filtrage de cohérence (valeurs abbérantes, dates..) et
+- [x] Créer le script de validation du fichier de configuration et des valeurs de fallbacks
+- [x] Créer la couche de filtrage de validation des données #2, filtrage de cohérence (valeurs abbérantes, dates..) et
   ses tests associés
 - [ ] Ajout d'un "verbose_mode" pour afficher les données altérées et retirées
 - [ ] Ajout de la "quarantine" pour sauvegarder les données altérées et retirées
-- [ ] Script de création d'un bucket RustFS "nyc_processed"
+- [x] Script de création d'un bucket RustFS "nyc_processed"
 - [ ] Data exploration pour déterminer le seuil d'acceptabilité des données
-- [ ] Création du squelette de la branche 2
 
 ## Liste branche 2 : intégration dans la bdd SQL
 

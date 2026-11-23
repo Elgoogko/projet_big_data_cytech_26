@@ -5,6 +5,18 @@ import org.apache.spark.sql.{DataFrame, SaveMode}
 
 object LocalFilesController extends AppLogger {
 
+  val projectRoot: Path = Paths.get(System.getProperty("user.dir")).getParent // résout la racine du projet, grand parent de build.sbt
+
+  /**
+   * Fonction utilitaire pour résoudre le chemin
+   *
+   * @param raw
+   * @return
+   */
+  def resolvePath(raw: String): Path = {
+    projectRoot.resolve(raw.stripPrefix("ROOT/")).normalize()
+  }
+
   /**
    * Sauve le dataframe sous format .parquet avec un nom donnée
    *
@@ -14,7 +26,7 @@ object LocalFilesController extends AppLogger {
    * @return fichier enregistré ou non
    */
   def saveParquet(df: DataFrame, folder_path: String): Boolean = {
-    val folder_as_Path: Path = Paths.get(folder_path)
+    val folder_as_Path: Path = resolvePath(folder_path)
     if (!Files.exists(folder_as_Path)) {
       logger.error(s"Le chemin spécifié n'existe pas : ${folder_path}")
       false
@@ -33,7 +45,7 @@ object LocalFilesController extends AppLogger {
    * @return si le fichier a été créer ou non
    */
   def createFolder(folder_path: String): Boolean = {
-    val folder_as_Path: Path = Paths.get(folder_path)
+    val folder_as_Path: Path = resolvePath(folder_path)
     if (!Files.exists(folder_as_Path)) {
       Files.createDirectories(folder_as_Path)
       logger.info(s"Dossier ${folder_path.toString} créé.")

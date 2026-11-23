@@ -64,22 +64,19 @@ object Config extends AppLogger {
       ),
       "s3" -> Map(
         "endpoint" -> "http://localhost:9000",
-        "nyc_bucket" -> "s3a://nyc-bucket/"
-  "raw_path" -> "nyc_raw"
-  ,
-  "processed_path" -> "nyc_processed"
-  ,
+        "nyc_bucket" -> "s3a://nyc-bucket/",
+        "raw_path" -> "nyc_raw",
+        "processed_path" -> "nyc_processed",
         "parquets" -> List("yellow_tripdata_2026-07.parquet")
       ),
       "data_processing" -> Map(
         "quarantine" -> true,
         "quarantine_path" -> "nyc_quarantine"
-      )
-  ,
+      ),
   "local_paths" -> Map(
-    "raw_path" -> "data/raw",
-    "processed_path" -> "data/processed",
-    "quarantine_path" -> "data/quarantine"
+    "raw_local_path" -> "data/raw",
+    "processed_local_path" -> "data/processed",
+    "quarantine_local_path" -> "data/quarantine"
   )
     )
   )
