@@ -24,7 +24,7 @@ app:
     parquets: [ "yellow_tripdata_2026-07.parquet" ]
 
   data_processing:
-    quarantine: false # la quarantaine permet de garder en mémoire les données filtrées, s'il y a une erreur dans le traitement des données
+    quarantine: true # la quarantaine permet de garder en mémoire les données filtrées, s'il y a une erreur dans le traitement des données
     quarantine_path: "nyc_quarantine" # chemin où seront stockées les données filtrées
 
   local_paths:

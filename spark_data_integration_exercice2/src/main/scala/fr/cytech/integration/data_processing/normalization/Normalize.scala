@@ -4,11 +4,13 @@ import org.apache.spark.sql.{Column, DataFrame}
 import org.apache.spark.sql.functions._ // col, lit, when, year, month, abs...
 import java.time.LocalDateTime
 
+import fr.cytech.integration.utils._
+
 /**
  * Objet dont le but est de prendre en entrée un fichier Parquet et de le normalizé (remplacer les null par des 0, par des codes par défauts ect...).
  * Le but est de rendre les filtres moins complexes par la suite.
  */
-object Normalize {
+object Normalize extends AppLogger {
 
   val feeColumns = Seq(
     "airport_fee", "congestion_surcharge", "extra", "mta_tax",
@@ -22,10 +24,12 @@ object Normalize {
    * @return Un dataframe normalisé
    */
   def normalizeFees(df: DataFrame): DataFrame = {
-    //    val nullCondition = feeColumns.map(c => col(c).isNull).reduce(_ || _)
-    //    val affectedCount = df.filter(nullCondition).count()
-    //
-    //    println(s"[INFO] normalizeFees : $affectedCount lignes contenaient des valeurs nulles et ont été modifiées.")
+    if (LogConfig.getVerbosity == Verbosity.F) {
+      val nullCondition = feeColumns.map(c => col(c).isNull).reduce(_ || _)
+      val affectedCount = df.filter(nullCondition).count()
+
+      log(LogLevel.Info, LogScope.Detail)(s"normalizeFees : $affectedCount lignes contenaient des valeurs nulles et ont été modifiées.")
+    }
     df.na.fill(0.0, feeColumns)
   }
 
@@ -38,10 +42,7 @@ object Normalize {
    * @return Dataframe dont payment_type a été normamlisé
    */
   def normalizePaymentType(df: DataFrame): DataFrame = {
-    //    val nullCondition = col("payment_type").isNull
-    //    val affectedCount = df.filter(nullCondition).count()
-    //    println(s"[INFO] normalizePaymentType : $affectedCount lignes contenaient des valeurs nulles et ont été modifiées.")
-
+    logDetail("payment_type", df)
     df.na.fill(5L, Seq("payment_type"))
   }
 
@@ -52,10 +53,21 @@ object Normalize {
    * @return Dataframe dont RateCodeID a été normamlisé
    */
   def normalizeRateCodeID(df: DataFrame): DataFrame = {
-    //    val nullCondition = col("RatecodeID").isNull
-    //    val affectedCount = df.filter(nullCondition).count()
-    //    println(s"[INFO] normalizeRateCodeID : $affectedCount lignes contenaient des valeurs nulles et ont été modifiées.")
+    logDetail("RatecodeID", df)
     df.na.fill(99L, Seq("RatecodeID"))
+  }
+
+  /**
+   * Fonction global de logs des détails des données
+   *
+   * @param col_name
+   */
+  def logDetail(col_name: String, df: DataFrame): Unit = {
+    if (LogConfig.getVerbosity == Verbosity.F) {
+      val nullCondition = col(col_name).isNull
+      val affectedCount = df.filter(nullCondition).count()
+      log(LogLevel.Info, LogScope.Detail)(s"${col_name} : $affectedCount lignes contenaient des valeurs nulles et ont été modifiées.")
+    }
   }
 
   def normalize(df: DataFrame): DataFrame = {

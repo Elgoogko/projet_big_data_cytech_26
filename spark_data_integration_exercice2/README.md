@@ -3,6 +3,31 @@
 L'objectif de cet exercice est de valider les données extraites du parquet du DataLake.
 C'est un premier nettoyage des données.
 
+# Quickstart
+
+Il faut d'abord s'assurer que le conteneur docker RustFS est lancé avec les parquets validés. Ensuite, il faut lancer la
+commande suivante :
+
+```bash
+sbt run --config <nom de la config dans ressources> --env <Chemin vers le .env> --verbose <N,M,F>
+
+```
+
+Avec:
+
+- ```--config``` (raccourci ```-c```) : le nom de la configuration par défaut. En chemin relatif : cherche dans les
+  configurations par défaut dans "ressources". Exemple : ```-c config.yaml``` va chercher le fichier ```config.yaml```
+  sous ```spark_data_integration_exercice2/src/main/resources```, sinon donner le chermin complet depuis la racine du
+  disque.
+- ```--env``` (raccourci ```-e```) : le chemin vers le fichier .env. En chemin relatif : cherche dans le dossier
+  courant. Exemple : ```-e .env``` va chercher le fichier ```.env``` dans le dossier courant, sinon donner le chemin
+  complet depuis la racine du disque.
+- ```--verbose``` (raccourci ```-v```) : active les logs de débogage (et affiche toutes les erreurs quel que soit le
+  mode).
+  - ```N``` : Seulement le début et la fin du programme seront affichés
+  - ```M``` : Affiche les logs d'étapes (normalisation, validation, lecture...)
+  - ```F``` : Affiche tous les logs possibles.
+
 # Pipeline de traitement
 
 |                      | Données brutes                                             | Normalisation                                                     | Validation                                                                                                                                             | Sauvegarde                                              |
@@ -12,7 +37,6 @@ C'est un premier nettoyage des données.
 | Chemin de sauvegarde | "s3a://nyc-bucket/nyc_raw/yellow_tripdata_2026-07.parquet" | data/interim/quarantine                                           | data/interim/quarantine                                                                                                                                | data/processed                                          |
 
 # TODO
-
 ## Liste Branche 1 : traitement des données
 
 - [x] Créer la couche de filtrage de normalisation des données et ses tests associés
@@ -21,15 +45,20 @@ C'est un premier nettoyage des données.
 - [x] Créer la couche de filtrage de validation des données #2, filtrage de cohérence (valeurs abbérantes, dates..) et
   ses tests associés
 - [ ] Ajout d'un "verbose_mode" pour afficher les données altérées et retirées
-- [ ] Ajout de la "quarantine" pour sauvegarder les données altérées et retirées
+- [x] Ajout de la "quarantine" pour sauvegarder les données altérées et retirées
 - [x] Script de création d'un bucket RustFS "nyc_processed"
 - [ ] Data exploration pour déterminer le seuil d'acceptabilité des données
 
 ## Liste branche 2 : intégration dans la bdd SQL
 
+- [ ] vérifié si la bd existe, si elle n'existe pas, la créer via le script de création (appel simple)
+- [ ] Ajout des données des parquets traités dans la bdd SQL
+
 # Lecture des données
 
-root
+```text
+# Table exacte avec les types
+
 |-- VendorID: integer (nullable = true)
 |-- tpep_pickup_datetime: timestamp_ntz (nullable = true)
 |-- tpep_dropoff_datetime: timestamp_ntz (nullable = true)
@@ -52,16 +81,17 @@ root
 |-- cbd_congestion_fee: double (nullable = true)
 |-- request_source: string (nullable = true)
 
-+-------+-----------------+------------------+
-|summary| trip_distance| total_amount|
-+-------+-----------------+------------------+
-| count| 3530109| 3530109|
-| mean|5.547543863375621|30.043324313784044|
-| stddev|576.2019217068215|23.157295991691058|
-| min| 0.0| -981.0|
-| max| 318129.1| 6471.35|
-+-------+-----------------+------------------+
 
++-------+-----------------+------------------+
+|summary| trip_distance   |   total_amount   |
++-------+-----------------+------------------+
+| count |     3530109     |     3530109      |
+| mean  |5.547543863375621|30.043324313784044|  
+| stddev|576.2019217068215|23.157295991691058|
+| min   |        0.0      |       -981.0     |
+| max   |     318129.1    |      6471.35     |
++-------+-----------------+------------------+
+```
 # Précision des fonctions
 
 ## Le mot clé "Implicit"

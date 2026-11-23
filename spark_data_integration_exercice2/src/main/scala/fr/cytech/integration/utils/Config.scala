@@ -45,9 +45,9 @@ object Config extends AppLogger {
       case l: List[_] => l.map(_.toString)
       case other => throw new ClassCastException(s"Impossible de convertir $other en List[String]")
     }
-
     def asOptDouble: Option[Double] = Option(value).map(_ => asDouble) // sert seulement pour les seuils qui renvoie soit un nombre soit null
   }
+
 
   // Schéma de référence pour la validation de la configuration et configuration par défaut si config invalide
   private val defaultConfig: Map[String, Any] = Map(

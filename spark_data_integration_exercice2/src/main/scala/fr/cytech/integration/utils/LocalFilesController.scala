@@ -29,9 +29,10 @@ object LocalFilesController extends AppLogger {
   def saveParquet(df: DataFrame, folder_path: String): Boolean = {
     val folder_as_Path: Path = resolvePath(folder_path)
     if (!Files.exists(folder_as_Path)) {
-      logger.error(s"Le chemin spécifié n'existe pas : ${folder_path}")
+      log(LogLevel.Error, LogScope.Lifecycle)(s"Le chemin spécifié n'existe pas : ${folder_path}")
       false
     } else {
+      log(LogLevel.Info, LogScope.Detail)(s"Enregistrement du dataframe dans le dossier ${folder_path}")
       df.write
         .mode(SaveMode.Overwrite)
         .parquet(folder_path)
@@ -49,10 +50,10 @@ object LocalFilesController extends AppLogger {
     val folder_as_Path: Path = resolvePath(folder_path)
     if (!Files.exists(folder_as_Path)) {
       Files.createDirectories(folder_as_Path)
-      logger.info(s"Dossier ${folder_path.toString} créé.")
+      log(LogLevel.Info, LogScope.Detail)(s"Dossier ${folder_path.toString} créé.")
       true
     } else {
-      logger.info(s"Le dossier ${folder_path.toString} existe déjà.")
+      log(LogLevel.Info, LogScope.Detail)(s"Le dossier ${folder_path.toString} existe déjà.")
       false
     }
   }

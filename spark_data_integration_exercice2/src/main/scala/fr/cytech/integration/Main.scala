@@ -28,7 +28,7 @@ import fr.cytech.integration.data_processing.validation._ // import des classes 
 case class CliArgs(
                     configPath: String = "default_config.yaml",
                     envPath: String = ".env",
-                    debug: Boolean = false
+                    verbose: String = "M"
                   )
 
 /**
@@ -56,20 +56,20 @@ object Main extends AppLogger {
           .action((x, c) => c.copy(envPath = x))
           .text("Chemin vers le fichier .env (défaut: .env local)"),
 
-        opt[Unit]('v', "verbose")
-          .action((_, c) => c.copy(debug = true))
-          .text("Active les logs de débogage (peux mener a des performances dégradées en raison des prints incessants"),
+        opt[String]('v', "verbose")
+          .action((x, c) => c.copy(verbose = x))
+          .text("Active les logs de débogage (peut mener a des performances dégradées en raison des prints incessants"),
 
         help("help").text("Montre l'aide")
       )
     }
-
     // Exécution du parsing
     OParser.parse(parser, args, CliArgs()) match {
       case Some(cli) =>
         Config.init(cli.configPath) // initialisation de Config
-        ready(cli.envPath)
+        LogConfig.setVerbosity(cli.verbose)
 
+        ready(cli.envPath)
       case _ =>
         sys.exit(1)
     }
@@ -115,15 +115,15 @@ object Main extends AppLogger {
     val bucketPath = new Path(bucketUri)
 
     if (!fs.exists(bucketPath)) {
-      logger.info(s"Le bucket '$bucketName' n'existe pas. Création en cours...")
+      log(LogLevel.Info, LogScope.Detail)(s"Le bucket '$bucketName' n'existe pas. Création en cours...")
       val created = fs.mkdirs(bucketPath)
       if (created) {
-        logger.info(s"Bucket '$bucketName' créé avec succès.")
+        log(LogLevel.Info, LogScope.Detail)(s"Bucket '$bucketName' créé avec succès.")
       } else {
         throw new RuntimeException(s"Échec de la création du bucket '$bucketName' sur RustFS.")
       }
     } else {
-      logger.info(s"Le bucket '$bucketName' existe déjà.")
+      log(LogLevel.Info, LogScope.Detail)(s"Le bucket '$bucketName' existe déjà.")
     }
   }
 
@@ -153,13 +153,13 @@ object Main extends AppLogger {
     }
 
     if (missing.nonEmpty) {
-      logger.error(s"Fichiers Parquet introuvables sur RustFS : ${missing.mkString(", ")}")
+      log(LogLevel.Error, LogScope.Lifecycle)(s"Fichiers Parquet introuvables sur RustFS : ${missing.mkString(", ")}")
       throw new java.io.FileNotFoundException(
         s"Fichiers manquants dans '$cleanBasePath' : ${missing.mkString(", ")}"
       )
     }
 
-    logger.info(s"${existing.size} fichier(s) Parquet vérifié(s) avec succès sur RustFS.")
+    log(LogLevel.Info, LogScope.Detail)(s"${existing.size} fichier(s) Parquet vérifié(s) avec succès sur RustFS.")
     existing.map(fileName => s"$cleanBasePath/$fileName")
   }
 
@@ -182,28 +182,36 @@ object Main extends AppLogger {
 
     var accessKeySecretKey = readDotEnv(dotenv_path)
 
-    logger.info("Starting Spark session")
-    val spark = SparkSession.builder()
-      .appName("nyc-taxi-integration")
-      .master(Config.getSetting("master").asString)
-      .config("spark.hadoop.fs.s3a.endpoint", Config.getSetting("endpoint").asString)
-      .config("spark.hadoop.fs.s3a.access.key", accessKeySecretKey("accessKey"))
-      .config("spark.hadoop.fs.s3a.secret.key", accessKeySecretKey("secretKey"))
-      .config("spark.hadoop.fs.s3a.path.style.access", "true")
-      .getOrCreate()
-    // s'assure que le bucket existe
-    ensureBucketExists(spark, Config.getSetting("processed_path").asString)
+    log(LogLevel.Info, LogScope.Step)("Démarrage de la session Spark")
 
-    // Réccupère les parquets et les fusionne en un dataframe
-    val parquets: List[String] = Config.getSetting("parquets").asStringList
-    logger.info("Parquets : " + parquets)
+    try {
+      val spark = SparkSession.builder()
+        .appName("nyc-taxi-integration")
+        .master(Config.getSetting("master").asString)
+        .config("spark.hadoop.fs.s3a.endpoint", Config.getSetting("endpoint").asString)
+        .config("spark.hadoop.fs.s3a.access.key", accessKeySecretKey("accessKey"))
+        .config("spark.hadoop.fs.s3a.secret.key", accessKeySecretKey("secretKey"))
+        .config("spark.hadoop.fs.s3a.path.style.access", "true")
+        .config("spark.sql.debug.maxToStringFields", "200")
+        .getOrCreate()
 
-    val valid_parquets = validateParquetFiles(spark, Config.getSetting("nyc_bucket").asString + Config.getSetting("raw_path").asString, parquets)
+      // s'assure que le bucket existe
+      ensureBucketExists(spark, Config.getSetting("processed_path").asString)
 
-    val raw = spark.read.parquet(valid_parquets: _*).withColumn("source_month", regexp_extract(col("_metadata.file_name"), "_(\\d{4}-\\d{2})\\.parquet", 1))
+      // Réccupère les parquets et les fusionne en un dataframe
+      val parquets: List[String] = Config.getSetting("parquets").asStringList
+      log(LogLevel.Info, LogScope.Detail)("Parquets : " + parquets)
 
-    logger.info(s"Dataframe chargé : contient ${raw.count()} lignes")
-    pipeline(spark, raw)
+      val valid_parquets = validateParquetFiles(spark, Config.getSetting("nyc_bucket").asString + Config.getSetting("raw_path").asString, parquets)
+
+      val raw = spark.read.parquet(valid_parquets: _*).withColumn("source_month", regexp_extract(col("_metadata.file_name"), "_(\\d{4}-\\d{2})\\.parquet", 1))
+
+      log(LogLevel.Info, LogScope.Detail)(s"Dataframe chargé : contient ${raw.count()} lignes")
+      pipeline(spark, raw)
+    } catch {
+      case e: Exception =>
+        log(LogLevel.Error, LogScope.Lifecycle)(s"Une erreur s'est produite : ${e}")
+    }
   }
 
   /**
@@ -213,42 +221,46 @@ object Main extends AppLogger {
    * @param raw_dataframe le dataframe de départ
    */
   def pipeline(spark: SparkSession, raw_dataframe: DataFrame): Unit = {
-    logger.info("Normalisation des données")
+    log(LogLevel.Info, LogScope.Lifecycle)("Nettoyage des données")
+
+    log(LogLevel.Info, LogScope.Step)("Normalisation des données")
     val normalized_df: DataFrame = Normalize.normalize(raw_dataframe)
 
-    logger.info("Validation des données")
+    log(LogLevel.Info, LogScope.Step)("Validation des données")
     // sert au calcul du dataframe de quarantaine
     val identified_df: DataFrame = normalized_df
       .withColumn("row_id", monotonically_increasing_id())
       .persist() // évite que les ids changent si le plan est recalculé
 
     val validated_df: DataFrame = Validation.filters(identified_df)
-    logger.info("Processus terminé : enregistrement des données")
 
     // Dataframe de quarantine
     if (Config.getSetting("quarantine").asBoolean) {
+      log(LogLevel.Info, LogScope.Detail)("Création du dataframe de quarantaine")
       val quarantine_df: DataFrame = identified_df.join(
         validated_df.select("row_id"),
         Seq("row_id"),
         "left_anti"
       )
-
+      log(LogLevel.Info, LogScope.Detail)(s"Le dataframe de quarantaine contient ${quarantine_df.count()} lignes, soit ${(quarantine_df.count() / raw_dataframe.count()) * 100}% des données brutes")
       LocalFilesController.saveParquet(quarantine_df, LocalFilesController.resolvePath(Config.getSetting("quarantine_local_path").asString).toString)
 
+      log(LogLevel.Info, LogScope.Step)(s"Enregistrement du dataframe quarantaine dans le stockage RustFS")
       quarantine_df.write
         .mode(SaveMode.Overwrite)
         .parquet(Config.getSetting("nyc_bucket").asString + Config.getSetting("quarantine_path").asString)
-
     }
-    logger.info(s"Dataframe final : contient ${validated_df.count()} lignes")
+    log(LogLevel.Info, LogScope.Step)("Processus terminé : enregistrement des données")
+    log(LogLevel.Debug, LogScope.Detail)(s"Dataframe final : contient ${validated_df.count()} lignes")
 
     // Copie locale des fichiers
     LocalFilesController.saveParquet(validated_df, LocalFilesController.resolvePath(Config.getSetting("processed_local_path").asString).toString)
 
+    log(LogLevel.Info, LogScope.Step)(s"Enregistrement du dataframe validé dans le stockage RustFS")
     validated_df.write
       .mode(SaveMode.Overwrite)
       .parquet(Config.getSetting("nyc_bucket").asString + Config.getSetting("processed_path").asString)
 
-    validated_df.head(5)
+    log(LogLevel.Info, LogScope.Lifecycle)("Processus terminé")
   }
 }
