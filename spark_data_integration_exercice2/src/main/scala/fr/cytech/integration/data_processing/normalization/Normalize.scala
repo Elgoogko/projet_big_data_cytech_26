@@ -22,10 +22,10 @@ object Normalize {
    * @return Un dataframe normalisé
    */
   def normalizeFees(df: DataFrame): DataFrame = {
-    val nullCondition = feeColumns.map(c => col(c).isNull).reduce(_ || _)
-    val affectedCount = df.filter(nullCondition).count()
-
-    println(s"[INFO] normalizeFees : $affectedCount lignes contenaient des valeurs nulles et ont été modifiées.")
+    //    val nullCondition = feeColumns.map(c => col(c).isNull).reduce(_ || _)
+    //    val affectedCount = df.filter(nullCondition).count()
+    //
+    //    println(s"[INFO] normalizeFees : $affectedCount lignes contenaient des valeurs nulles et ont été modifiées.")
     df.na.fill(0.0, feeColumns)
   }
 

@@ -7,11 +7,12 @@ import org.apache.spark.sql.{Column, DataFrame}
  * Il compile aussi les données éjectés par les filtres et les combines pour les enregistré dans un dossier de quarantaine (seulement si l'option est activé)
  */
 object Validation {
-
   /**
-   * Applique la pipeline de validation à ce fichier
+   * Applique la pipeline de validation au dataframe donnée.
+   * Crée le dataframe de quarantaine
    *
    * @param dataframe
+   * @return dataframe traité et dataframe de quarantaine
    */
   def filters(dataframe: DataFrame): DataFrame = {
     val filters_step_one: DataFrame = Filters.filters(dataframe)

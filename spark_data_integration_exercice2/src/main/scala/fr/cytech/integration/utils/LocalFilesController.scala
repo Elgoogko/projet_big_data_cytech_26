@@ -6,6 +6,7 @@ import org.apache.spark.sql.{DataFrame, SaveMode}
 object LocalFilesController extends AppLogger {
 
   val projectRoot: Path = Paths.get(System.getProperty("user.dir")).getParent // résout la racine du projet, grand parent de build.sbt
+  val ressourcesRoot: Path = projectRoot.resolve("spark_data_integration_exercice2/src/main/resources").normalize()
 
   /**
    * Fonction utilitaire pour résoudre le chemin
@@ -51,7 +52,7 @@ object LocalFilesController extends AppLogger {
       logger.info(s"Dossier ${folder_path.toString} créé.")
       true
     } else {
-      logger.info("Le dossier existe déjà.")
+      logger.info(s"Le dossier ${folder_path.toString} existe déjà.")
       false
     }
   }
