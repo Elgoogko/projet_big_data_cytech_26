@@ -24,6 +24,12 @@ libraryDependencies += "io.github.cdimascio" % "dotenv-java" % "3.0.0"
 // bibliothèque d'argparser pour sbt
 libraryDependencies += "com.github.scopt" %% "scopt" % "4.1.0"
 
+libraryDependencies ++= Seq(
+  "org.apache.logging.log4j" % "log4j-api" % "2.20.0",
+  "org.apache.logging.log4j" % "log4j-core" % "2.20.0",
+  "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.20.0"
+)
+
 Test / fork := true
 Test / javaOptions += "--add-exports=java.base/sun.nio.ch=ALL-UNNAMED"
 
@@ -38,5 +44,6 @@ javaOptions ++= Seq(
   "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
   "--add-opens=java.base/sun.nio.cs=ALL-UNNAMED",
   "--add-opens=java.base/sun.security.action=ALL-UNNAMED",
-  "--add-opens=java.base/sun.util.calendar=ALL-UNNAMED"
+  "--add-opens=java.base/sun.util.calendar=ALL-UNNAMED",
+  "-Dfile.encoding=UTF-8" // prend en compte les symboles français
 )
