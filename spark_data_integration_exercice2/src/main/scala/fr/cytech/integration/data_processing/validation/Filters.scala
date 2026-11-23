@@ -54,5 +54,5 @@ object Filters {
   // Fonction de nettoyage du dataframe final, combinant tous les tests précédents
   val all: Seq[Column] = Seq(validVendorID, validTpepPickupDatetime, validTpepDropoffDatetime, validPassengerCount, validTripDistance, validRateCodeID, validStoreAndFwdFlag, validPULocationID, validDOLocationID, validPaymentType, validFareAmount, validExtra, validMtaTax, validTipAmount, validTollsAmount, validImprovementSurcharge, validTotalAmount, validCongestionSurcharge, validAirportFee, validCbdCongestionFee)
 
-  def cleanDF(df: DataFrame): DataFrame = df.filter(all.reduce(_ && _))
+  def filters(df: DataFrame): DataFrame = df.filter(all.reduce(_ && _))
 }

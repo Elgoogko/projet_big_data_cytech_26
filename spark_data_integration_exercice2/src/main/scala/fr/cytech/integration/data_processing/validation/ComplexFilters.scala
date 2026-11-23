@@ -12,35 +12,13 @@ import java.time.YearMonth
 object ComplexFilters {
 
   /**
-   * Helper pour avoir les bornes pour la fonction "validDateForTrip"
-   *
-   * @param fileName Nom du parquet à validé, le mois se trouve dans le nom
-   * @throws IllegalArgumentException Si le nom du fichier ne respecte pas le format attendu ou si il est vide
-   * @return La borne "EndDate" du parquet
-   */
-  def monthBounds(fileName: String): (LocalDateTime, LocalDateTime) = {
-
-    if (!fileName.matches(".*_(\\d{4}-\\d{2})\\.parquet") || fileName.isEmpty) {
-      throw new IllegalArgumentException("Nom du fichier invalide, format attendu : 'yellow_tripdata_YYYY-MM.parquet'. Valeur reçue : " + fileName)
-    }
-
-    val ym = YearMonth.parse(fileName.replaceAll(".*_(\\d{4}-\\d{2})\\.parquet", "$1"))
-    (ym.atDay(1).atStartOfDay(), ym.plusMonths(1).atDay(1).atStartOfDay())
-  }
-
-  /**
    * Vérifie que les voyages sont strictement rataché au mois en cours.
    * Par convention:  un voyage commençant le mois précédent et se terminant le mois en cours est rataché au mois précédent.
    * Au contraire : un voyage commmençant dans le mois actuel et finissant dans le mois suivant est rataché au mois actuel.
    *
-   * @param startDate 1er du mois actuel (en incluant année et mois)
-   * @param endDate   Le 1er du mois suivant à 00h00 exactement.
    * @return Les colonnes qui respectent ce filtrage
    */
-  def validDateForTrip(startDate: LocalDateTime, endDate: LocalDateTime): Column = {
-    col("tpep_pickup_datetime") >= lit(Timestamp.valueOf(startDate)) &&
-      col("tpep_pickup_datetime") < lit(endDate)
-  }
+  def validDateForTrip: Column = date_format(col("tpep_pickup_datetime"), "yyyy-MM") === col("source_month")
 
   /**
    * Vérifie la cohérence temporel: l'arrivé se fait strictement après le départ
@@ -58,4 +36,11 @@ object ComplexFilters {
    * @return les colonnes qui respecetent ce filtrage
    */
   def validAirportFees: Column = !(col("airport_fee") > 0) || col("PULocationID").isin(132, 138)
+
+  def complexFilters(dataframe: DataFrame): DataFrame = {
+    dataframe
+      .filter(validDateForTrip)
+      .filter(validTemporalCoherence)
+      .filter(validAirportFees)
+  }
 }

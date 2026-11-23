@@ -8,7 +8,7 @@ import scala.util.{Try, Using}
 
 import java.util.{List => JList, Map => JMap}
 
-object Config extends AppLogging {
+object Config extends AppLogger {
 
   /**
    * Conversion dynamique pour être sur de convertir les strings en double, les string en int, ou le contraire
@@ -59,17 +59,28 @@ object Config extends AppLogging {
     "app" -> Map(
       "spark" -> Map(
         "app_name" -> "spark_data_integration_exercice2",
-        "master" -> "local[*]"
+        "master" -> "local[*]",
+        "local_copy" -> true
       ),
       "s3" -> Map(
         "endpoint" -> "http://localhost:9000",
-        "raw_path" -> "s3a://nyc-bucket/nyc_raw",
+        "nyc_bucket" -> "s3a://nyc-bucket/"
+  "raw_path" -> "nyc_raw"
+  ,
+  "processed_path" -> "nyc_processed"
+  ,
         "parquets" -> List("yellow_tripdata_2026-07.parquet")
       ),
       "data_processing" -> Map(
         "quarantine" -> true,
-        "quarantine_path" -> "data/quarantine"
+        "quarantine_path" -> "nyc_quarantine"
       )
+  ,
+  "local_paths" -> Map(
+    "raw_path" -> "data/raw",
+    "processed_path" -> "data/processed",
+    "quarantine_path" -> "data/quarantine"
+  )
     )
   )
 

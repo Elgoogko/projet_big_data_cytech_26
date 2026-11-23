@@ -57,4 +57,8 @@ object Normalize {
     //    println(s"[INFO] normalizeRateCodeID : $affectedCount lignes contenaient des valeurs nulles et ont été modifiées.")
     df.na.fill(99L, Seq("RatecodeID"))
   }
+
+  def normalize(df: DataFrame): DataFrame = {
+    normalizeFees(normalizePaymentType(normalizeRateCodeID(df)))
+  }
 }
