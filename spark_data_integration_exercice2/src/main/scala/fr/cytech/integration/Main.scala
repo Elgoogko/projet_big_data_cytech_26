@@ -242,7 +242,10 @@ object Main extends AppLogger {
         Seq("row_id"),
         "left_anti"
       )
-      log(LogLevel.Info, LogScope.Detail)(s"Le dataframe de quarantaine contient ${quarantine_df.count()} lignes, soit ${(quarantine_df.count() / raw_dataframe.count()) * 100}% des données brutes")
+      val quarantine_count = quarantine_df.count().toDouble
+      val raw_count = raw_dataframe.count().toDouble
+
+      log(LogLevel.Info, LogScope.Detail)(s"Le dataframe de quarantaine contient ${quarantine_count} lignes, soit ${(quarantine_count / raw_count) * 100}% des données brutes")
       LocalFilesController.saveParquet(quarantine_df, LocalFilesController.resolvePath(Config.getSetting("quarantine_local_path").asString).toString)
 
       log(LogLevel.Info, LogScope.Step)(s"Enregistrement du dataframe quarantaine dans le stockage RustFS")

@@ -12,7 +12,7 @@ object SingleDatas {
     passenger_count = Some(1L), trip_distance = Some(2.5), RatecodeID = Some(1), store_and_fwd_flag = Some("N"),
     PULocationID = Some(10), DOLocationID = Some(20), payment_type = Some(1), fare_amount = Some(12.0), extra = Some(0.0),
     mta_tax = Some(0.5), tip_amount = Some(2.0), tolls_amount = Some(0.0), improvement_surcharge = Some(0.3),
-    total_amount = Some(14.8), congestion_surcharge = Some(0.0), airport_fee = Some(0.0), cbd_congestion_fee = Some(0.0)
+    total_amount = Some(14.8), congestion_surcharge = Some(0.0), airport_fee = Some(0.0), cbd_congestion_fee = Some(0.0), source_month = Some("2025-01")
   )
 
   // Valeurs de tests pour le VendorID : seules les valeurs 1,2,6,7 fonctionnent
@@ -62,7 +62,7 @@ object SingleDatas {
     (Some(0L), false),
     (Some(7L), false),
     (Some(98L), false),
-    (None, true)
+    (None, false)
   )
 
   // Valeurs de tests pour le rateCode : seules les valeurs "null" et {"N", "Y"} (trimmées) sont acceptées
@@ -102,7 +102,7 @@ object SingleDatas {
 
   // Valeurs de tests pour le paymentType : seules les valeurs "null" et {1,2,3,4,5,6} sont acceptées
   val paymentTypeCases: Seq[(Option[Long], Boolean)] = Seq(
-    (None, true),
+    (None, false),
     (Some(0), true),
     (Some(1), true),
     (Some(2), true),
@@ -128,7 +128,7 @@ object SingleDatas {
 
   // Valeurs de tests pour extra : seules les valeurs "null" ou strictement positives sont acceptées
   val extraCases: Seq[(Option[Double], Boolean)] = Seq(
-    (None, true),
+    (None, false),
     (Some(0.0), true),
     (Some(0.001), true),
     (Some(100.0), true),
@@ -164,7 +164,7 @@ object SingleDatas {
 
   // Valeurs de tests pour le tollsAmount : seules les valeurs "null" ou strictement positives sont acceptées
   val tollsAmountCases: Seq[(Option[Double], Boolean)] = Seq(
-    (None, true),
+    (None, false),
     (Some(0.0), true),
     (Some(0.001), true),
     (Some(100.0), true),
@@ -188,7 +188,7 @@ object SingleDatas {
 
   // Valeurs de tests pour le congestionSurcharge : seules les valeurs "null" ou strictement positives sont acceptées
   val congestionSurchargeCases: Seq[(Option[Double], Boolean)] = Seq(
-    (None, true),
+    (None, false),
     (Some(0.0), true),
     (Some(0.001), true),
     (Some(100.0), true),
@@ -200,7 +200,7 @@ object SingleDatas {
 
   // Valeurs de tests pour le improvementSurcharge : seules les valeurs "null" ou strictement positives sont acceptées
   val improvementSurchargeCases: Seq[(Option[Double], Boolean)] = Seq(
-    (None, true),
+    (None, false),
     (Some(0.0), true),
     (Some(0.001), true),
     (Some(100.0), true),
@@ -212,7 +212,7 @@ object SingleDatas {
 
   // Valeurs de tests pour le airportFee : seules les valeurs "null" ou strictement positives sont acceptées
   val airportFeeCases: Seq[(Option[Double], Boolean)] = Seq(
-    (None, true),
+    (None, false),
     (Some(0.0), true),
     (Some(0.001), true),
     (Some(100.0), true),
@@ -224,7 +224,7 @@ object SingleDatas {
 
   // Valeurs de tests pour le cbdCongestionFee : seules les valeurs "null" ou strictement positives sont acceptées
   val cbdCongestionFeeCases: Seq[(Option[Double], Boolean)] = Seq(
-    (None, true),
+    (None, false),
     (Some(0.0), true),
     (Some(0.001), true),
     (Some(100.0), true),

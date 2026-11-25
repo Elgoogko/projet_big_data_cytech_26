@@ -17,11 +17,11 @@ object Filters {
 
   def validTpepDropoffDatetime: Column = col("tpep_dropoff_datetime").isNotNull
 
-  def validPassengerCount: Column = col("passenger_count").isNull || col("passenger_count") >= 0
+  def validPassengerCount: Column = col("passenger_count").isNull || col("passenger_count") > 0
 
-  def validTripDistance: Column = col("trip_distance").isNotNull && col("trip_distance") >= 0
+  def validTripDistance: Column = col("trip_distance").isNotNull && col("trip_distance") > 0
 
-  def validRateCodeID: Column = col("RatecodeID").isin(1, 2, 3, 4, 5, 6, 99)
+  def validRateCodeID: Column = col("RatecodeID").isin(1, 2, 3, 4, 5, 99)
 
   def validStoreAndFwdFlag: Column = col("store_and_fwd_flag").isNull || trim(col("store_and_fwd_flag")).isin("N", "Y")
 
@@ -41,7 +41,7 @@ object Filters {
 
   def validTollsAmount: Column = col("tolls_amount") >= 0
 
-  def validTotalAmount: Column = col("total_amount").isNotNull && col("total_amount") >= 0
+  def validTotalAmount: Column = col("total_amount").isNotNull && col("total_amount") > 0
 
   def validCongestionSurcharge: Column = col("congestion_surcharge") >= 0
 

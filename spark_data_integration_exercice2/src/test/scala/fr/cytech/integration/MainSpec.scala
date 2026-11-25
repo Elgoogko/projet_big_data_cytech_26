@@ -7,8 +7,9 @@ import org.scalatest.funsuite.AnyFunSuite // Importe "test"
 import org.scalatest.matchers.should.Matchers // importe les mots clés "shouldBe", "in"....
 import org.scalatest.BeforeAndAfterAll // Importe les fonctions "beforeAll", "afterAll" : permet de définir des actions à effectuer avant et après les tests
 
+import fr.cytech.testUtils._
 
-trait MainSpec extends AnyFunSuite with Matchers {
+trait MainSpec extends AnyFunSuite with Matchers with TestUtils {
   // lazy val garantit qu'une seule instance est créée et partagée
   implicit lazy val spark: SparkSession = MainSpec.sharedSpark
 }

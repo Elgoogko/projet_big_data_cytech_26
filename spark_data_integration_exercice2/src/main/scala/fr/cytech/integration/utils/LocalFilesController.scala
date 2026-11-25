@@ -3,16 +3,20 @@ package fr.cytech.integration.utils
 import java.nio.file.{Files, StandardCopyOption, Paths, Path}
 import org.apache.spark.sql.{DataFrame, SaveMode}
 
+/**
+ * gestionnaire des fichiers et dossiers locaux
+ */
 object LocalFilesController extends AppLogger {
 
   val projectRoot: Path = Paths.get(System.getProperty("user.dir")).getParent // résout la racine du projet, grand parent de build.sbt
-  val ressourcesRoot: Path = projectRoot.resolve("spark_data_integration_exercice2/src/main/resources").normalize()
+  val ressourcesRoot: Path = projectRoot.resolve("spark_data_integration_exercice2/src/main/resources").normalize() // résout le fichier ressources dans lequel se trouvent les configs
 
   /**
-   * Fonction utilitaire pour résoudre le chemin
+   * Fonction utilitaire pour résoudre un chemin de dossier / fichiers.
+   * On s'en sert pour évité les problèmes d'OS
    *
-   * @param raw
-   * @return
+   * @param raw le chemin vers le dossier spécifié
+   * @return le chemin résolue depuis la racine du projet ProjectRoot.
    */
   def resolvePath(raw: String): Path = {
     projectRoot.resolve(raw.stripPrefix("ROOT/")).normalize()

@@ -28,6 +28,6 @@ app:
     quarantine_path: "nyc_quarantine" # chemin où seront stockées les données filtrées
 
   local_paths:
-    raw_local_path: "/data/raw"
-    processed_local_path: "/data/processed"
-    quarantine_local_path: "/data/quarantine"
+    raw_local_path: "data/raw"
+    processed_local_path: "data/processed"
+    quarantine_local_path: "data/quarantine"

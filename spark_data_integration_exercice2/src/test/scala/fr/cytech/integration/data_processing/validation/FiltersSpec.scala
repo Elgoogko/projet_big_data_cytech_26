@@ -12,7 +12,6 @@ import org.apache.spark.sql.functions._ // col, lit, when, year, month, abs...
 
 // Données de tests
 import fr.cytech.fixtures._
-import fr.cytech.testUtils.TestUtils.checkFilter // Import de la fonction utilitaire checkFilter
 import fr.cytech.testUtils.TaxiTrip
 import fr.cytech.integration.MainSpec
 
