@@ -1,6 +1,6 @@
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
-ThisBuild / scalaVersion := "2.13.17"
+ThisBuild / scalaVersion := "2.13.18"
 
 lazy val root = (project in file("."))
   .settings(
@@ -13,6 +13,25 @@ libraryDependencies += "org.apache.spark" %% "spark-core" % "4.2.0"
 libraryDependencies += "org.apache.spark" %% "spark-sql" % "4.2.0"
 // Source: https://mvnrepository.com/artifact/org.apache.spark/spark-hadoop-cloud
 libraryDependencies += "org.apache.spark" %% "spark-hadoop-cloud" % "4.2.0"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % Test
+
+// Lecture d'un fichier YAML de configuration
+libraryDependencies += "org.yaml" % "snakeyaml" % "2.3"
+
+// lecture simplifié des .env (pour java mais fonctionne aussi avec scala)
+libraryDependencies += "io.github.cdimascio" % "dotenv-java" % "3.0.0"
+
+// bibliothèque d'argparser pour sbt
+libraryDependencies += "com.github.scopt" %% "scopt" % "4.1.0"
+
+libraryDependencies ++= Seq(
+  "org.apache.logging.log4j" % "log4j-api" % "2.20.0",
+  "org.apache.logging.log4j" % "log4j-core" % "2.20.0",
+  "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.20.0"
+)
+
+Test / fork := true
+Test / javaOptions += "--add-exports=java.base/sun.nio.ch=ALL-UNNAMED"
 
 fork := true
 javaOptions ++= Seq(
@@ -25,5 +44,6 @@ javaOptions ++= Seq(
   "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
   "--add-opens=java.base/sun.nio.cs=ALL-UNNAMED",
   "--add-opens=java.base/sun.security.action=ALL-UNNAMED",
-  "--add-opens=java.base/sun.util.calendar=ALL-UNNAMED"
+  "--add-opens=java.base/sun.util.calendar=ALL-UNNAMED",
+  "-Dfile.encoding=UTF-8" // prend en compte les symboles français
 )

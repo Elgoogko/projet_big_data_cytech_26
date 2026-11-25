@@ -18,7 +18,7 @@ Projet Big Data de l'année 2024-2025 de CY Tech réalisé par :
 
 ## Environnement
 
-- Java 11
+- Java 17
 - Python 3.10
 - Scala 2.13.17
 - RustFS

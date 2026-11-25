@@ -3,6 +3,7 @@
 .idea
 .env
 __pycache__/
+.ollamassist
 data/raw/*.parquet
 
 .bsp/
